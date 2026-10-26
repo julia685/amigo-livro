@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Amigo Livro</title>
+  
+<style>
+  :root {
+    --ink: #39252a;
+    --paper: #fffaf2;
+    --cream: #f5eadb;
+    --rust: #741d2b;
+    --green: #741d2b;
+    --gold: #d5ad61;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    padding: 24px 16px;
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    color: var(--ink);
+    background:
+      radial-gradient(ellipse at top, #fff7ed 0%, transparent 55%),
+      linear-gradient(145deg, #681522, #8f2636 52%, #51111e);
+  }
+
+  .card {
+    position: relative;
+    overflow: hidden;
+    width: min(100%, 460px);
+    background: var(--paper);
+    border: 1px solid var(--gold);
+    border-radius: 24px;
+    padding: 30px 26px 24px;
+    box-shadow: 0 22px 65px #27070d66;
+  }
+
+  .card::before {
+    content: "✦  ❄  ✦";
+    display: block;
+    margin: -30px -26px 22px;
+    padding: 12px;
+    text-align: center;
+    color: var(--gold);
+    background: var(--rust);
+    border-bottom: 2px solid var(--gold);
+    letter-spacing: 10px;
+    font-size: 15px;
+  }
+
+  .logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto 12px;
+}
+
+.logo img {
+  display: block;
+  width: min(100%, 220px);
+  max-height: 180px;
+  object-fit: contain;
+}
+
+  h1 {
+    text-align: center;
+    margin: 8px 0 4px;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(2rem, 8vw, 2.4rem);
+    color: var(--rust);
+    letter-spacing: -1px;
+  }
+
+  .sub {
+    text-align: center;
+    color: #80666a;
+    margin: 0 0 24px;
+    font-family: Georgia, "Times New Roman", serif;
+    font-style: italic;
+  }
+
+  #login > p:first-child {
+    text-align: center;
+    color: #70585a;
+    line-height: 1.6;
+  }
+
+  label {
+    display: block;
+    font-weight: 650;
+    margin: 16px 0 7px;
+    color: #63202c;
+  }
+
+  input,
+  select {
+    width: 100%;
+    min-height: 48px;
+    padding: 13px 14px;
+    border: 1px solid #ddc8b6;
+    border-radius: 12px;
+    font: inherit;
+    background: #fff;
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  input:focus,
+  select:focus {
+    border-color: var(--rust);
+    box-shadow: 0 0 0 3px #741d2b1c;
+  }
+
+  button {
+    width: 100%;
+    min-height: 48px;
+    border: 1px solid var(--gold);
+    border-radius: 12px;
+    padding: 13px 16px;
+    margin-top: 18px;
+    font: inherit;
+    font-weight: 750;
+    cursor: pointer;
+    color: #fffaf2;
+    background: var(--rust);
+    box-shadow: 0 4px 0 #4e101c;
+    transition: transform 0.15s, background 0.2s;
+  }
+
+  button:hover:not(:disabled) {
+    background: #902b3b;
+    transform: translateY(-1px);
+  }
+
+  button:active:not(:disabled) {
+    transform: translateY(1px);
+    box-shadow: 0 2px 0 #4e101c;
+  }
+
+  button:focus-visible {
+    outline: 3px solid var(--gold);
+    outline-offset: 3px;
+  }
+
+  button:disabled {
+    opacity: 0.6;
+    cursor: wait;
+  }
+
+  #logoutBtn {
+    background: #a44a43 !important;
+  }
+
+  .notice {
+    margin-top: 16px;
+    padding: 12px;
+    border: 1px solid #e8d5b7;
+    border-radius: 12px;
+    background: #f7eddf;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+  }
+
+  .error {
+    background: #fae4df;
+    color: #852f20;
+    border-color: #e8b8ae;
+  }
+
+  .result {
+    text-align: center;
+    padding: 20px 14px 14px;
+    margin-top: 14px;
+    border: 1px solid #e2c995;
+    border-radius: 18px;
+    background: linear-gradient(145deg, #fff9ef, #f5e7d6);
+  }
+
+  .result > div:first-child {
+    color: #765c47;
+    font-family: Georgia, "Times New Roman", serif;
+    font-style: italic;
+  }
+
+  .result .person {
+    font: bold 1.8rem Georgia, "Times New Roman", serif;
+    color: var(--rust);
+    margin: 14px 0;
+    overflow-wrap: anywhere;
+  }
+
+  .small {
+    color: #76675c;
+    font-size: 0.88rem;
+    line-height: 1.6;
+  }
+
+  .hidden {
+    display: none !important;
+  }
+
+  footer {
+    text-align: center;
+    margin-top: 25px;
+    color: #8b6d68;
+    font-size: 0.8rem;
+    line-height: 1.6;
+  }
+
+  @media (max-width: 380px) {
+    body {
+      padding: 12px;
+    }
+
+    .card {
+      padding: 24px 18px 20px;
+      border-radius: 19px;
+    }
+
+    .card::before {
+      margin: -24px -18px 20px;
+    }
+
+    .logo {
+      font-size: 40px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      transition: none !important;
+    }
+  }
+</style>
+
+</head>
+<body>
+  <main class="card">
+  <div class="logo">
+    <img src="logonatal.png" alt="Logo natalina do Amigo Livro">
+  </div>
+    <h1>Amigo Livro</h1>
+    <p class="sub">Uma surpresa entre páginas</p>
+
+<section id="login">
+  <p>Escolha seu nome e informe o código de acesso que você recebeu pelo WhatsApp.</p>
+
+  <label for="participant">Selecione seu nome</label>
+  <select id="participant">
+    <option value="">Carregue a lista de participantes…</option>
+  </select>
+
+  <label for="pin">Código de acesso</label>
+  <input
+    id="pin"
+    type="password"
+    autocomplete="off"
+    placeholder="Digite seu código de acesso"
+  />
+
+  <button id="loginBtn">Entrar</button>
+  <div id="loginMessage" class="notice hidden" role="status"></div>
+</section>
+
+    <section id="draw" class="hidden">
+      <p id="welcome"></p>
+      <div id="existingResult" class="result hidden">
+        <div>Você tirou:</div>
+        <div class="person" id="recipientName"></div>
+        <p class="small">Guarde esse segredo! Seu resultado já está salvo.</p>
+      </div>
+      <button id="drawBtn">🎁 Descobrir quem tirei</button>
+      <div id="drawMessage" class="notice hidden" role="status"></div>
+      <button id="logoutBtn" style="background:#a64f36">Sair</button>
+    </section>
+    <footer>Feito com carinho para o Whistledow Book Club</footer>
+  </main>
+
+  <script type="module">
+    // Cole aqui a URL e a chave anon/public do seu projeto Supabase.
+    // Nunca coloque a service_role key neste arquivo.
+    const SUPABASE_URL = "https://imhnvhhqgngztsxkmpey.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_L9t9xA_n-oS84Fer-ONbIQ_y-2wn8Rl";
+    const API = () => `${SUPABASE_URL}/rest/v1/rpc/`;
+
+    const participantSelect = document.querySelector("#participant");
+    const pinInput = document.querySelector("#pin");
+    const loginSection = document.querySelector("#login");
+    const drawSection = document.querySelector("#draw");
+    const loginMessage = document.querySelector("#loginMessage");
+    const drawMessage = document.querySelector("#drawMessage");
+    let participantId = null;
+    let participantPin = null;
+
+    function message(el, text, error=false) {
+      el.textContent = text;
+      el.classList.remove("hidden", "error");
+      if (error) el.classList.add("error");
+    }
+    function hide(el) { el.classList.add("hidden"); }
+    
+
+async function rpc(name, body = {}) {
+  if (
+    SUPABASE_URL.startsWith("COLE_A_") ||
+    SUPABASE_ANON_KEY.startsWith("COLE_A_")
+  ) {
+    throw new Error("O Supabase ainda não foi configurado.");
+  }
+
+  const url = `${SUPABASE_URL.replace(/\/+$/, "")}/rest/v1/rpc/${name}`;
+
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "apikey": SUPABASE_ANON_KEY
+    },
+    body: JSON.stringify(body)
+  });
+
+  const data = await response.json().catch(() => ({}));
+
+  if (!response.ok) {
+    throw new Error(
+      data.message ||
+      data.details ||
+      `Erro HTTP ${response.status}. Confira a configuração.`
+    );
+  }
+
+  return data;
+}
+    async function loadParticipants() {
+      try {
+        const participants = await rpc("public_participant_list");
+        participantSelect.innerHTML = '<option value="">Selecione seu nome</option>';
+        for (const p of participants) {
+          const option = document.createElement("option");
+          option.value = p.id;
+          option.textContent = p.name;
+          participantSelect.appendChild(option);
+        }
+      
+} catch (e) {
+  console.error("Erro ao carregar participantes:", e);
+  participantSelect.innerHTML =
+    '<option value="">Erro ao carregar participantes</option>';
+  message(loginMessage, e.message, true);
+}
+
+    }
+
+    document.querySelector("#loginBtn").addEventListener("click", async () => {
+      hide(loginMessage);
+      const id = participantSelect.value;
+      const pin = pinInput.value;
+      if (!id || !pin) return message(loginMessage, "Selecione seu nome e digite sua senha.", true);
+      const btn = document.querySelector("#loginBtn");
+      btn.disabled = true;
+      try {
+        const result = await rpc("participant_login", { p_id: id, p_pin: pin });
+        participantId = id;
+        participantPin = pin;
+        document.querySelector("#welcome").textContent = `Olá, ${result.name}!`;
+        loginSection.classList.add("hidden");
+        drawSection.classList.remove("hidden");
+        if (result.recipient_name) showResult(result.recipient_name);
+      } catch (e) {
+        message(loginMessage, e.message || "Nome ou senha incorretos.", true);
+      } finally { btn.disabled = false; }
+    });
+
+    function showResult(name) {
+      document.querySelector("#recipientName").textContent = name;
+      document.querySelector("#existingResult").classList.remove("hidden");
+      document.querySelector("#drawBtn").classList.add("hidden");
+      hide(drawMessage);
+    }
+
+    document.querySelector("#drawBtn").addEventListener("click", async () => {
+      hide(drawMessage);
+      const btn = document.querySelector("#drawBtn");
+      btn.disabled = true;
+      try {
+        const result = await rpc("draw_my_result", { p_id: participantId, p_pin: participantPin });
+        if (result.recipient_name) showResult(result.recipient_name);
+        else message(drawMessage, result.message || "Não foi possível realizar o sorteio.", true);
+      } catch (e) {
+        message(drawMessage, e.message || "Não foi possível realizar o sorteio.", true);
+      } finally { btn.disabled = false; }
+    });
+
+    document.querySelector("#logoutBtn").addEventListener("click", () => {
+      participantId = null; participantPin = null; pinInput.value = "";
+      drawSection.classList.add("hidden"); loginSection.classList.remove("hidden");
+      document.querySelector("#existingResult").classList.add("hidden");
+      document.querySelector("#drawBtn").classList.remove("hidden");
+      loadParticipants();
+    });
+
+    loadParticipants();
+  </script>
+</body>
+</html>
